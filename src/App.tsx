@@ -13,12 +13,11 @@ function App() {
   };
 
   return (
-    <div className="flex">
-      {/* <ChartsMap /> */}
-    <HiMenu onClick={handleSidebarToggle} className="w-6 h-6 right-5 top-5 hover:cursor-pointer " />
+    <div className="flex flex-col lg:flex-row">
+    <HiMenu onClick={handleSidebarToggle} className="w-6 h-6  ml-2 mt-2 cursor-pointer" />
     <div className="flex-1">
       <Router>
-      <Sidebar isOpen={isOpen} onClose={handleSidebarToggle} />
+        <Sidebar isOpen={isOpen} onClose={handleSidebarToggle} />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/contact" element={<CreateContactPage />} />
