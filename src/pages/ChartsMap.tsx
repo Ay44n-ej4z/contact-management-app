@@ -17,8 +17,8 @@ ChartJS.register(
 )
 interface CustomMarkerProps extends MarkerProps {
     onClick: () => void;
-  }
-  
+}
+
 
 interface CountryDataType {
     country: string;
@@ -26,13 +26,13 @@ interface CountryDataType {
     deaths: number;
     recovered: number;
     countryInfo?: {
-      iso2: string;
-      iso3: string;
-      flag: string;
-      lat:number,
-      long:number
+        iso2: string;
+        iso3: string;
+        flag: string;
+        lat: number,
+        long: number
     };
-  }
+}
 
 type HistoricalData = {
     cases: Record<string, number>;
@@ -43,11 +43,12 @@ function Map({ center, zoom }: { center: [number, number], zoom: number }) {
     const map = useMap();
     map.setView(center, zoom);
     return null;
-  }
-  
+}
+
 
 const ChartsMap: React.FC = () => {
     const [selectedCountry, setSelectedCountry] = useState<CountryDataType | null>(null);
+    const [countryReport, setCountryReport] = useState({})
     const { isLoading: isGlobalLoading, data: globalData } = useQuery("globalData", async () => {
         const response = await fetch(
             "https://disease.sh/v3/covid-19/all"
@@ -73,14 +74,23 @@ const ChartsMap: React.FC = () => {
     };
 
 
-    const { isLoading, data } = useQuery<HistoricalData>("graphData", async () => {
+    const { isLoading, data  } = useQuery<HistoricalData>("graphData", async () => {
         const response = await fetch(
             "https://disease.sh/v3/covid-19/historical/all?lastdays=all"
         );
-        const data = await response.json();
+        const data = await response.json(); 
         return data;
     });
+    
+    const dividingTheValue = (value: any)=> {
+        const halfOfKeys = Math.ceil(Object.keys(value).length / 40);
+        const entries = Object.entries(value);
 
+        entries.splice(halfOfKeys);
+
+        const updatedObject = Object.fromEntries(entries);
+        return JSON.stringify(updatedObject)
+    } 
 
     return (
         <div>
@@ -103,12 +113,12 @@ const ChartsMap: React.FC = () => {
                     </ol>
                 </div>
                 <div className="w-full lg:w-2/3 h-screen">
-                        <MapContainer >
-                            <Map center={[20, 0]} zoom={2} />                    
+                    <MapContainer >
+                        <Map center={[20, 0]} zoom={2} />
                         <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}{r}.png" />
-                        {countryData?.map((country: CountryDataType, idx:number) => (
-                           <Marker position={[country?.countryInfo?.lat || 0, country?.countryInfo?.long || 0] } 
-                    >
+                        {countryData?.map((country: CountryDataType, idx: number) => (
+                            <Marker position={[country?.countryInfo?.lat || 0, country?.countryInfo?.long || 0]}
+                            >
                                 <Popup>
                                     <div>
                                         <h3 className="font-bold">{country.country}</h3>
@@ -126,7 +136,7 @@ const ChartsMap: React.FC = () => {
                                         </div>
                                     </div>
                                 </Popup>
-                            </Marker > 
+                            </Marker >
                         ))}
                     </MapContainer>
                 </div>
@@ -145,17 +155,21 @@ const ChartsMap: React.FC = () => {
 
                     <Line
                         data={{
-                            labels: Object.keys(data.cases),
+                            labels: Object.keys(dividingTheValue(data.cases)),
                             datasets: [
                                 {
+                                    
+            //  dividingTheValue(data.cases),
+            //  dividingTheValue(data.deaths),
+            //  dividingTheValue(data.recovered)  
                                     label: 'Total Cases',
-                                    data: Object.values(JSON.stringify(data.cases)),
+                                    data: Object.values(dividingTheValue(data.cases)),
                                     borderColor: '#FFA500',
                                     fill: false,
                                 },
                                 {
                                     label: 'Total Recovered',
-                                    data: Object.values(JSON.stringify(data.recovered)),
+                                    data: Object.values(dividingTheValue(data.deaths)),
                                     borderColor: '#00FF00',
                                     fill: false,
 
@@ -163,7 +177,7 @@ const ChartsMap: React.FC = () => {
                                 {
 
                                     label: 'Total Deaths',
-                                    data: Object.values(JSON.stringify(data.deaths)),
+                                    data: Object.values(dividingTheValue(data.recovered)),
                                     borderColor: '#FF0000',
                                     fill: false,
 

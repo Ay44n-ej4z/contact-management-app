@@ -18,7 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       />
 
       <aside
-        className={`fixed inset-y-0 left-0 z-20 w-64 bg-white overflow-y-auto transition-transform duration-300 ease-in-out transform ${
+        className={`fixed inset-y-0 left-0 z-20 w-64 bg-slate-200 overflow-y-auto transition-transform duration-300 ease-in-out transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -28,10 +28,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
         <nav className="mt-10">
 
-          <a className="flex items-center mt-4 py-2 px-6 bg-gray-200 bg-opacity-25 text-gray-700" onClick={() => navigate("/contact")}>
+          <a className="flex items-center mt-4 py-2 px-6 bg-gray-400 bg-opacity-25 text-gray-700 hover:cursor-pointer" onClick={() => navigate("/contact")}>
            Contact Details
           </a>
-          <a className="flex items-center mt-4 py-2 px-6 bg-gray-200 bg-opacity-25 text-gray-700" onClick={()=> navigate("/chartsMap")}>
+          <a className="flex items-center mt-4 py-2 px-6 bg-gray-400 bg-opacity-25 text-gray-700 hover:cursor-pointer" onClick={()=> navigate("/chartsMap")}>
             Charts and Map
           </a>
         </nav>

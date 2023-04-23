@@ -21,8 +21,10 @@ export default function Modal({
     });
 
     useEffect(() => {
-        if (Boolean(singleContact)) {
+     
+        if (Object.keys(singleContact).length !== 0) {
             setFormValues(singleContact)
+            return
         }
     }, [])
 
